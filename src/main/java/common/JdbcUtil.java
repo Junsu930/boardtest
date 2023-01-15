@@ -16,7 +16,7 @@ public class JdbcUtil {
 			Class.forName("oracle.jdbc.OracleDriver");
 			System.out.println("드라이버 로딩 성공");
 			InitialContext ctx = new InitialContext();
-			ds = (DataSource)ctx.lookup("java:comp/env/jdbc.myOracle");
+			ds = (DataSource)ctx.lookup("java:comp/env/jdbc/orcl");
 			System.out.println("Connection Pool 생성");
 		}catch(ClassNotFoundException e) {
 			e.printStackTrace();
@@ -28,7 +28,7 @@ public class JdbcUtil {
 	
 	private JdbcUtil() {}
 	
-	public JdbcUtil getInstance() {
+	public static JdbcUtil getInstance() {
 		return instance;
 	}
 	

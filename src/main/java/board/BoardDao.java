@@ -14,6 +14,10 @@ public class BoardDao {
 	
 	private JdbcUtil ju;
 	
+	public BoardDao() {
+		ju = JdbcUtil.getInstance();
+	}
+	
 	//삽입(C)
 	public int insert(BoardVo vo) {
 		Connection con = null;
@@ -30,8 +34,19 @@ public class BoardDao {
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}finally {
+			if(pstmt!=null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 			if(con!=null) {
-				con.close();
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				} //풀에 반환
 			}
 		}
 		
@@ -40,9 +55,9 @@ public class BoardDao {
 	
 	//조회(R)
 	public List<BoardVo> selectAll(){
-		Connection con;
-		Statement stmt;
-		ResultSet rs;
+		Connection con = null;
+		Statement stmt = null;
+		ResultSet rs = null;
 		String query = "SELECT * FROM BOARD";
 		ArrayList<BoardVo> ls = new ArrayList<BoardVo>();
 		try {
@@ -62,8 +77,82 @@ public class BoardDao {
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally {
+			if(rs!=null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(stmt!=null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(con!=null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				} //풀에 반환
+			}
 		}
 		return ls;
+	}
+	
+	
+	//하나의 게시글만 조회
+	public BoardVo selectOne(int num){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String query = "SELECT * FROM BOARD WHERE NUM =?";
+		BoardVo vo = null;
+	
+		try {
+			con = ju.getConnection();
+			pstmt = con.prepareStatement(query);
+			pstmt.setInt(1, num);
+			rs = pstmt.executeQuery(query);
+
+			if(rs.next()) {
+				 vo = new BoardVo(rs.getInt(1),
+						rs.getString(2), 
+						rs.getString(3),
+						rs.getString(4),
+						new Date(rs.getDate(5).getTime()),
+						rs.getInt(6));
+			}
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}finally {
+			if(rs!=null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(pstmt!=null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(con!=null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				} //풀에 반환
+			}
+		}
+		return vo;
 	}
 	
 	//수정(U)
