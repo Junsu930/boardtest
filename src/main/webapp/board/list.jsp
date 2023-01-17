@@ -25,12 +25,13 @@
 <c:forEach var = "board" items= "${ls}" >
 <tr>
 	<th>${board.num}</th>
-	<th><a href="${pageContext.request.contextPath}/boardDetail.jsp?num=${board.num}">${board.title}</a></th>
+	<th><a href="${pageContext.request.contextPath}/board/boardDetail.jsp?num=${board.num}">${board.title}</a></th>
 	<th>${board.writer}</th>
 	<th>${board.regdate}</th>
 	<th>${board.cnt}</th>
 </tr>
 </c:forEach>
 </table>
+<a href="<c:url value="board/registForm.jsp"/>"><button>글등록</button></a>
 </body>
 </html>

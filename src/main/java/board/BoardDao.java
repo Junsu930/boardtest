@@ -109,14 +109,14 @@ public class BoardDao {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String query = "SELECT * FROM BOARD WHERE NUM =?";
+		String query = "SELECT * FROM BOARD WHERE NUM = ?";
 		BoardVo vo = null;
 	
 		try {
 			con = ju.getConnection();
 			pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, num);
-			rs = pstmt.executeQuery(query);
+			rs = pstmt.executeQuery();
 
 			if(rs.next()) {
 				 vo = new BoardVo(rs.getInt(1),
